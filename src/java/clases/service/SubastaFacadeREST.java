@@ -74,6 +74,9 @@ public class SubastaFacadeREST {
                 .allow("OPTIONS").build();
 
     }
+    
+    
+    
 
     @PUT
     @Path("{id}/{valor_ini}/{valor_fin}/{fecha_sub}/{estado}/{transporte}/{boleta}")
@@ -215,6 +218,38 @@ public class SubastaFacadeREST {
         return Response.ok().entity(su)
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+                .allow("OPTIONS").build();
+
+    }
+    @PUT
+    @Path("Modificar/{id}/{valor_fin}/{transporte}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response Modificar(@PathParam("id") Long id,  @PathParam("valor_fin") Long valor_fin, @PathParam("transporte") Long transporte) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_SUBASTA.MODIFICARSUBASTA")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(3, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(4, Long.class,
+                        ParameterMode.OUT)
+                .setParameter(1, id)
+                .setParameter(2, valor_fin)
+                .setParameter(3, transporte);
+
+
+        query.execute();
+
+        Object resp = query.getOutputParameterValue(4);
+        String su = "{"
+                + "\"resp\": " + resp
+                + "}";
+        return Response.ok()
+                .entity(su.toString())
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
                 .allow("OPTIONS").build();
 
     }
