@@ -55,10 +55,7 @@ public class ComunaFacadeREST {
                 + "\"resp\":" + resp
                 + "}";
         return Response.ok()
-                .entity(su.toString())
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+                .entity(su.toString()).build();
     }
 
     @PUT
@@ -86,10 +83,7 @@ public class ComunaFacadeREST {
                 + "\"resp\":" + resp
                 + "}";
         return Response.ok()
-                .entity(su.toString())
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+                .entity(su.toString()).build();
 
     }
 
@@ -111,10 +105,7 @@ public class ComunaFacadeREST {
                 + "\"resp\":" + resp
                 + "}";
         return Response.ok()
-                .entity(su.toString())
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+                .entity(su.toString()).build();
 
     }
 
@@ -142,15 +133,9 @@ public class ComunaFacadeREST {
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
         if (su.equals("{\"Array\":[]}")) {
-            return Response.ok().entity("null")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                    .allow("OPTIONS").build();
+            return Response.ok().entity("null").build();
         }
-        return Response.ok().entity(su)
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+        return Response.ok().entity(su).build();
     }
      @GET
     @Path("Region/{id}")
@@ -176,15 +161,9 @@ public class ComunaFacadeREST {
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
         if (su.equals("{\"Array\":[]}")) {
-            return Response.ok().entity("null")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                    .allow("OPTIONS").build();
+            return Response.ok().entity("null").build();
         }
-        return Response.ok().entity(su)
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+        return Response.ok().entity(su).build();
     }
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -207,15 +186,9 @@ public class ComunaFacadeREST {
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
         if (su.equals("{\"Array\":[]}")) {
-            return Response.ok().entity("null")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                    .allow("OPTIONS").build();
+            return Response.ok().entity("null").build();
         }
-        return Response.ok().entity(su)
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+        return Response.ok().entity(su).build();
     }
 
     protected EntityManager getEntityManager() {

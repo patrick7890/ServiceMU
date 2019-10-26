@@ -62,10 +62,7 @@ public class ProductoFacadeREST {
                 + "\"resp\": " + resp
                 + "}";
         return Response.ok()
-                .entity(su.toString())
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+                .entity(su.toString()).build();
 
     }
 
@@ -100,10 +97,7 @@ public class ProductoFacadeREST {
                 + "\"resp\": " + resp
                 + "}";
         return Response.ok()
-                .entity(su.toString())
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+                .entity(su.toString()).build();
     }
 
     @DELETE
@@ -124,10 +118,7 @@ public class ProductoFacadeREST {
         String su = "[{\"resp\":\"" + resp + "\""
                 ;
         return Response.ok()
-                .entity(su.toString())
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+                .entity(su.toString()).build();
     }
 
     @GET
@@ -157,15 +148,9 @@ public class ProductoFacadeREST {
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
         if (su.equals("{\"Array\":[]}")) {
-            return Response.ok().entity("null")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                    .allow("OPTIONS").build();
+            return Response.ok().entity("null").build();
         }
-        return Response.ok().entity(su)
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+        return Response.ok().entity(su).build();
     }
 
     @GET
@@ -191,15 +176,9 @@ public class ProductoFacadeREST {
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
         if (su.equals("{\"Array\":[]}")) {
-            return Response.ok().entity("null")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                    .allow("OPTIONS").build();
+            return Response.ok().entity("null").build();
         }
-        return Response.ok().entity(su)
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+        return Response.ok().entity(su).build();
     }
 
 //    @GET
