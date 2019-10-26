@@ -59,8 +59,7 @@ public class ProductoFacadeREST {
 
         Object resp = query.getOutputParameterValue(5);
         String su = "{"
-                + "\"resp\": "+resp
-                
+                + "\"resp\": " + resp
                 + "}";
         return Response.ok()
                 .entity(su.toString())
@@ -97,8 +96,9 @@ public class ProductoFacadeREST {
         query.execute();
 
         Object resp = query.getOutputParameterValue(6);
-        String su = "[{\"resp\":\"" + resp + "\""
-                ;
+       String su = "{"
+                + "\"resp\": " + resp
+                + "}";
         return Response.ok()
                 .entity(su.toString())
                 .header("Access-Control-Allow-Origin", "*")

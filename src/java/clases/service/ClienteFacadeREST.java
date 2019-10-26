@@ -149,10 +149,10 @@ public class ClienteFacadeREST {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response find(@PathParam("id") Long id) {
+    public Response find(@PathParam("id") String id) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE.FIND")
-                .registerStoredProcedureParameter(1, Long.class,
+                .registerStoredProcedureParameter(1, String.class,
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(2, Class.class,
                         ParameterMode.REF_CURSOR)

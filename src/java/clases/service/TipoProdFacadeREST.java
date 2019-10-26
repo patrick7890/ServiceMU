@@ -161,8 +161,7 @@ public class TipoProdFacadeREST  {
 
         for (Object[] aux : SELECT_ALL) {
             su += "{\"id\":\"" + aux[0] + "\","
-                    + "\"desc\":\"" + aux[1] + "\","
-                    + "\"region\":\"" + aux[2] + "\""
+                    + "\"desc\":\"" + aux[1] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";

@@ -55,8 +55,7 @@ public class DireccionFacadeREST {
 
         Object resp = query.getOutputParameterValue(4);
         String su = "{"
-                + "\"resp\": "+resp
-                
+                + "\"resp\": " + resp
                 + "}";
         return Response.ok()
                 .entity(su.toString())
@@ -68,7 +67,7 @@ public class DireccionFacadeREST {
     @PUT
     @Path("{id}/{cliente}/{calle}/{comuna}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response edit(@PathParam("id") PathSegment id, @PathParam("cliente") Long cliente, @PathParam("calle") String calle, @PathParam("comuna") Long comuna) {
+    public Response edit(@PathParam("id") Long id, @PathParam("cliente") Long cliente, @PathParam("calle") String calle, @PathParam("comuna") Long comuna) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_DIRECCION.MODIFICAR")
                 .registerStoredProcedureParameter(1, Long.class,
@@ -81,15 +80,15 @@ public class DireccionFacadeREST {
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(5, Class.class,
                         ParameterMode.OUT)
-                .setParameter(1, cliente)
-                .setParameter(2, calle)
-                .setParameter(3, comuna);
+                .setParameter(1, id)
+                .setParameter(2, cliente)
+                .setParameter(3, calle)
+                .setParameter(4, comuna);
         query.execute();
 
-        Object resp = query.getOutputParameterValue(6);
+        Object resp = query.getOutputParameterValue(5);
         String su = "{"
-                + "\"resp\": "+resp
-                
+                + "\"resp\": " + resp
                 + "}";
         return Response.ok()
                 .entity(su.toString())
@@ -112,8 +111,7 @@ public class DireccionFacadeREST {
 
         Object resp = query.getOutputParameterValue(2);
         String su = "{"
-                + "\"resp\": "+resp
-                
+                + "\"resp\": " + resp
                 + "}";
         return Response.ok()
                 .entity(su.toString())
@@ -125,7 +123,7 @@ public class DireccionFacadeREST {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response find(@PathParam("id") PathSegment id) {
+    public Response find(@PathParam("id") Long id) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_DIRECCION.FIND")
                 .registerStoredProcedureParameter(1, Long.class,
@@ -140,7 +138,7 @@ public class DireccionFacadeREST {
 
         for (Object[] aux : SELECT_ALL) {
             su += "{\"id\":\"" + aux[0] + "\","
-                    + "\"cliente\":\"" + aux[1] + "\","
+                    + "\"cliente\":\"" + aux[3] + "\","
                     + "\"calle\":\"" + aux[1] + "\","
                     + "\"comuna\":\"" + aux[2] + "\""
                     + "},";
@@ -173,7 +171,7 @@ public class DireccionFacadeREST {
 
         for (Object[] aux : SELECT_ALL) {
             su += "{\"id\":\"" + aux[0] + "\","
-                    + "\"cliente\":\"" + aux[1] + "\","
+                    + "\"cliente\":\"" + aux[3] + "\","
                     + "\"calle\":\"" + aux[1] + "\","
                     + "\"comuna\":\"" + aux[2] + "\""
                     + "},";
@@ -190,6 +188,7 @@ public class DireccionFacadeREST {
                 .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
                 .allow("OPTIONS").build();
     }
+
     @GET
     @Path("Direccion/{id}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -207,9 +206,10 @@ public class DireccionFacadeREST {
         String su = " ";
 
         for (Object[] aux : SELECT_ALL) {
-            su += "{\"id\":\"" + aux[0] + "\","
-                    + "\"calle\":\"" + aux[1] + "\""
-                   
+           su += "{\"id\":\"" + aux[0] + "\","
+                    + "\"cliente\":\"" + aux[3] + "\","
+                    + "\"calle\":\"" + aux[1] + "\","
+                    + "\"comuna\":\"" + aux[2] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -224,6 +224,7 @@ public class DireccionFacadeREST {
                 .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
                 .allow("OPTIONS").build();
     }
+
     @GET
     @Path("Tarifa/{id}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -242,7 +243,6 @@ public class DireccionFacadeREST {
 
         for (Object[] aux : SELECT_ALL) {
             su += "{\"tarifa\":\"" + aux[4] + "\""
-                    
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
