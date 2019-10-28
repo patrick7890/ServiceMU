@@ -180,6 +180,36 @@ public class ProductoFacadeREST {
         }
         return Response.ok().entity(su).build();
     }
+    
+    @GET
+    @Path("buscartipo/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findPorTipo(@PathParam("id") Long id) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_PRODUCTO.BUSCARTIPO")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Class.class,
+                        ParameterMode.REF_CURSOR)
+                        .setParameter(1, id);
+
+        query.execute();
+        List<Object[]> SELECT_ALL = query.getResultList();
+
+        String su = " ";
+
+        for (Object[] aux : SELECT_ALL) {
+            su += "{\"id\":\"" + aux[0] + "\","
+                    + "\"nombre\":\"" + aux[1] + "\","
+                     + "\"desc\":\"" + aux[2] + "\""
+                    + "},";
+        }
+        su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
+        if (su.equals("{\"Array\":[]}")) {
+            return Response.ok().entity("null").build();
+        }
+        return Response.ok().entity(su).build();
+    }
 
 //    @GET
 //    @Path("{from}/{to}")

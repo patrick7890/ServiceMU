@@ -226,6 +226,29 @@ public class SubastaFacadeREST {
                 .entity(su.toString()).build();
 
     }
+    @PUT
+    @Path("Terminar/{id}")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    public Response Terminar(@PathParam("id") Long id) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_SUBASTA.ELIMINAR")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Long.class,
+                        ParameterMode.OUT)
+                .setParameter(1, id);
+             
+
+        query.execute();
+
+        Object resp = query.getOutputParameterValue(2);
+        String su = "{"
+                + "\"resp\": " + resp
+                + "}";
+        return Response.ok()
+                .entity(su.toString()).build();
+
+    }
 
     protected EntityManager getEntityManager() {
         return em;
