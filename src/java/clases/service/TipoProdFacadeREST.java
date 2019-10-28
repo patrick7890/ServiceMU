@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
  */
 @Stateless
 @Path("clases.tipoprod")
-public class TipoProdFacadeREST  {
+public class TipoProdFacadeREST {
 
     @PersistenceContext(unitName = "ServiceMUPU")
     private EntityManager em;
@@ -49,14 +49,10 @@ public class TipoProdFacadeREST  {
 
         Object resp = query.getOutputParameterValue(2);
         String su = "{"
-                + "\"resp\": "+resp
-                
+                + "\"resp\":" + resp
                 + "}";
         return Response.ok()
-                .entity(su.toString())
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+                .entity(su.toString()).build();
 
     }
 
@@ -82,10 +78,7 @@ public class TipoProdFacadeREST  {
                 + "\"resp\":" + resp
                 + "}";
         return Response.ok()
-                .entity(su.toString())
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+                .entity(su.toString()).build();
     }
 
     @DELETE
@@ -106,15 +99,12 @@ public class TipoProdFacadeREST  {
                 + "\"resp\":" + resp
                 + "}";
         return Response.ok()
-                .entity(su.toString())
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+                .entity(su.toString()).build();
     }
 
     @GET
     @Path("{id}")
-    @Produces({ MediaType.APPLICATION_JSON})
+    @Produces({MediaType.APPLICATION_JSON})
     public Response find(@PathParam("id") Long id) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_TIPO_PROD.FIND")
@@ -128,22 +118,16 @@ public class TipoProdFacadeREST  {
         List<Object[]> SELECT_ALL = query.getResultList();
         String su = " ";
 
-         for (Object[] aux : SELECT_ALL) {
+        for (Object[] aux : SELECT_ALL) {
             su += "{\"id\":\"" + aux[0] + "\","
                     + "\"tipo\":\"" + aux[1] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
         if (su.equals("{\"Array\":[]}")) {
-            return Response.ok().entity("null")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                    .allow("OPTIONS").build();
+            return Response.ok().entity("null").build();
         }
-        return Response.ok().entity(su)
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+        return Response.ok().entity(su).build();
     }
 
     @GET
@@ -153,6 +137,7 @@ public class TipoProdFacadeREST  {
                 .createStoredProcedureQuery("PKG_MAIPOU_TIPO_PROD.SELECT_ALL")
                 .registerStoredProcedureParameter(1, Class.class,
                         ParameterMode.REF_CURSOR);
+        
 
         query.execute();
         List<Object[]> SELECT_ALL = query.getResultList();
@@ -166,17 +151,11 @@ public class TipoProdFacadeREST  {
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
         if (su.equals("{\"Array\":[]}")) {
-            return Response.ok().entity("null")
-                    .header("Access-Control-Allow-Origin", "*")
-                    .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                    .allow("OPTIONS").build();
+            return Response.ok().entity("null").build();
         }
-        return Response.ok().entity(su)
-                .header("Access-Control-Allow-Origin", "*")
-                .header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
-                .allow("OPTIONS").build();
+        return Response.ok().entity(su).build();
     }
-
+    
 
     protected EntityManager getEntityManager() {
         return em;
