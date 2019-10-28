@@ -36,9 +36,9 @@ public class PublicacionFacadeREST {
     private EntityManager em;
 
     @POST
-    @Path("{valor}/{stock}/{estado}/{producto}/{proveedor}")
+    @Path("{valor}/{stock}/{producto}/{proveedor}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response create(@PathParam("valor") Long valor, @PathParam("stock") Long stock, @PathParam("estado") BigInteger estado, @PathParam("producto") Long producto, @PathParam("proveedor") Long proveedor) {
+    public Response create(@PathParam("valor") Long valor, @PathParam("stock") Long stock, @PathParam("producto") Long producto, @PathParam("proveedor") Long proveedor) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_PUBLICACION.INSERTAR")
                 .registerStoredProcedureParameter(1, Long.class,
@@ -55,7 +55,7 @@ public class PublicacionFacadeREST {
                         ParameterMode.OUT)
                 .setParameter(1, valor)
                 .setParameter(2, stock)
-                .setParameter(3, estado)
+                .setParameter(3, 0)
                 .setParameter(4, producto)
                 .setParameter(5, proveedor);
 
@@ -93,6 +93,7 @@ public class PublicacionFacadeREST {
         return Response.ok()
                 .entity(su.toString()).build();
     }
+    
 
     @PUT
     @Path("{id}/{valor}/{stock}/{estado}/{producto}/{proveedor}")
@@ -244,6 +245,8 @@ public class PublicacionFacadeREST {
         }
         return Response.ok().entity(su).build();
     }
+    
+    
 
     protected EntityManager getEntityManager() {
         return em;

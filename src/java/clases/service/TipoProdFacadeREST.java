@@ -137,6 +137,7 @@ public class TipoProdFacadeREST {
                 .createStoredProcedureQuery("PKG_MAIPOU_TIPO_PROD.SELECT_ALL")
                 .registerStoredProcedureParameter(1, Class.class,
                         ParameterMode.REF_CURSOR);
+        
 
         query.execute();
         List<Object[]> SELECT_ALL = query.getResultList();
@@ -154,6 +155,7 @@ public class TipoProdFacadeREST {
         }
         return Response.ok().entity(su).build();
     }
+    
 
     protected EntityManager getEntityManager() {
         return em;
