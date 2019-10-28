@@ -63,12 +63,35 @@ public class PublicacionFacadeREST {
 
         Object resp = query.getOutputParameterValue(6);
         String su = "{"
-                + "\"resp\": "+resp
-                
+                + "\"resp\": " + resp
                 + "}";
         return Response.ok()
                 .entity(su.toString()).build();
 
+    }
+
+    @PUT
+    @Path("publicar/{id}/{estado}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response estado(@PathParam("id") Long id, @PathParam("estado") Long estado) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_PUBLICACION.PUBLICAR")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(3, Class.class,
+                        ParameterMode.OUT)
+                .setParameter(1, id)
+                .setParameter(2, estado);
+        query.execute();
+
+        Object resp = query.getOutputParameterValue(3);
+        String su = "{"
+                + "\"resp\":" + resp
+                + "}";
+        return Response.ok()
+                .entity(su.toString()).build();
     }
 
     @PUT
@@ -160,6 +183,7 @@ public class PublicacionFacadeREST {
         }
         return Response.ok().entity(su).build();
     }
+
     @GET
     @Path("FindWithName/{id}")
     @Produces({MediaType.APPLICATION_JSON})
