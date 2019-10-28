@@ -218,12 +218,14 @@ public class PublicacionFacadeREST {
     }
 
     @GET
+    
     @Produces({MediaType.APPLICATION_JSON})
     public Response findAll() {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_PUBLICACION.SELECT_ALL")
                 .registerStoredProcedureParameter(1, Class.class,
                         ParameterMode.REF_CURSOR);
+                        
 
         query.execute();
         List<Object[]> SELECT_ALL = query.getResultList();
@@ -245,6 +247,39 @@ public class PublicacionFacadeREST {
         }
         return Response.ok().entity(su).build();
     }
+    @GET
+    @Path("Activo/{estado}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findActivo(@PathParam("estado") Long estado) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_PUBLICACION.SELECT_ESTADO")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Class.class,
+                        ParameterMode.REF_CURSOR)
+                .setParameter(1, estado);
+
+        query.execute();
+        List<Object[]> SELECT_ALL = query.getResultList();
+
+        String su = " ";
+
+        for (Object[] aux : SELECT_ALL) {
+            su += "{\"id\":\"" + aux[0] + "\","
+                    + "\"valor\":\"" + aux[1] + "\","
+                    + "\"stock\":\"" + aux[2] + "\","
+                    + "\"estado\":\"" + aux[3] + "\","
+                    + "\"producto\":\"" + aux[4] + "\","
+                    + "\"proveedor\":\"" + aux[5] + "\""
+                    + "},";
+        }
+        su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
+        if (su.equals("{\"Array\":[]}")) {
+            return Response.ok().entity("null").build();
+        }
+        return Response.ok().entity(su).build();
+    }
+    
     
     
 
