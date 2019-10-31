@@ -46,7 +46,7 @@ public class CorreoBean {
     
     
     Session sesionCorreo = Session.getDefaultInstance(props,null);
-    sesionCorreo.setDebug(false);
+    sesionCorreo.setDebug(true);
     
     Message mensajeCorreo =new MimeMessage(sesionCorreo);
     String origen="teamalexduoc@gmail.com";
@@ -54,8 +54,11 @@ public class CorreoBean {
     mensajeCorreo.setRecipient(Message.RecipientType.TO,new InternetAddress(destino));
         mensajeCorreo.setContent(mensaje,"text/html");
         mensajeCorreo.setSubject(asunto);
-        Transport transporte = sesionCorreo.getTransport(destino);
+        
+        
+        Transport transporte = sesionCorreo.getTransport("stmp");
         transporte.connect("smtp.gmail.com","teamalexduoc","Alex123456789");
+        transporte.sendMessage(mensajeCorreo,mensajeCorreo.getAllRecipients());
         
        
         
