@@ -197,6 +197,39 @@ public class SubastaFacadeREST {
         return Response.ok().entity(su).build();
 
     }
+    @GET
+    @Path("Entrega/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response cargarEntrega(@PathParam("id") Long id) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_SUBASTA.ENTREGA")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Class.class,
+                        ParameterMode.REF_CURSOR)
+                        .setParameter(1, id);
+
+        query.execute();
+
+        List<Object[]> SELECT_ALL = query.getResultList();
+        String su = " ";
+
+        for (Object[] aux : SELECT_ALL) {
+            su += "{\"id\":\"" + aux[0] + "\","
+                    + "\"calle\":\"" + aux[1] + "\","
+                    + "\"comuna\":\"" + aux[2] + "\","
+                    + "\"region\":\"" + aux[3] + "\","
+                      + "\"destinatario\":\"" + aux[4] + "\","
+                     + "\"valor\":\"" + aux[5] + "\""
+                    + "},";
+        }
+        su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
+        if (su.equals("{\"Array\":[]}")) {
+            return Response.ok().entity("null").build();
+        }
+        return Response.ok().entity(su).build();
+
+    }
 
     @PUT
     @Path("Modificar/{id}/{valor_fin}/{transporte}")
