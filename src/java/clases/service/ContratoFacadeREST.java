@@ -134,10 +134,10 @@ public class ContratoFacadeREST {
         String su = " ";
 
         for (Object[] aux : SELECT_ALL) {
-            su += "{\"Usuario\":\"" + aux[0] + "\","
-                    + "\"Contrato\":\"" + aux[1] + "\","
-                    + "\"Fecha\":\"" + aux[2] + "\","
-                    + "\"Ruta\":\"" + aux[3] + "\""
+            su += "{\"Usuario\":\"" + aux[3] + "\","
+                    + "\"Contrato\":\"" + aux[0] + "\","
+                    + "\"Fecha\":\"" + aux[1] + "\","
+                    + "\"Ruta\":\"" + aux[2] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -161,10 +161,10 @@ public class ContratoFacadeREST {
         String su = " ";
 
         for (Object[] aux : SELECT_ALL) {
-            su += "{\"usuario\":\"" + aux[0] + "\","
-                    + "\"contrato\":\"" + aux[1] + "\","
-                    + "\"fecha\":\"" + aux[2] + "\","
-                    + "\"ruta\":\"" + aux[3] + "\""
+            su += "{\"Usuario\":\"" + aux[3] + "\","
+                    + "\"Contrato\":\"" + aux[0] + "\","
+                    + "\"Fecha\":\"" + aux[1] + "\","
+                    + "\"Ruta\":\"" + aux[2] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";

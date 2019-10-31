@@ -35,23 +35,26 @@ public class SolicitudFacadeREST {
     private EntityManager em;
 
     @POST
-    @Path("{estado}/{cliente}")
+    @Path("{estado}/{cliente}/{tipo}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response create(@PathParam("estado") BigInteger estado, @PathParam("cliente") Long cliente) {
+    public Response create(@PathParam("estado") BigInteger estado, @PathParam("cliente") Long cliente, @PathParam("tipo") Long tipo) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_SOLICITUD.MODIFICAR")
                 .registerStoredProcedureParameter(1, String.class,
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(2, Long.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(3, Class.class,
+                .registerStoredProcedureParameter(3, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(4, Class.class,
                         ParameterMode.OUT)
                 .setParameter(1, estado)
-                .setParameter(2, cliente);
+                .setParameter(2, cliente)
+                .setParameter(3, tipo);
 
         query.execute();
 
-        Object resp = query.getOutputParameterValue(3);
+        Object resp = query.getOutputParameterValue(4);
         String su = "{"
                 + "\"resp\":" + resp
                 + "}";
@@ -60,9 +63,9 @@ public class SolicitudFacadeREST {
     }
 
     @PUT
-    @Path("{id}/{estado}/{cliente}")
+    @Path("{id}/{estado}/{client}/{tipo}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response edit(@PathParam("id") Long id, @PathParam("estado") BigInteger estado, @PathParam("cliente") Long cliente) {
+    public Response edit(@PathParam("id") Long id, @PathParam("estado") BigInteger estado, @PathParam("cliente") Long cliente, @PathParam("tipo") Long tipo) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_SOLICITUD.MODIFICAR")
                 .registerStoredProcedureParameter(1, Long.class,
@@ -71,15 +74,43 @@ public class SolicitudFacadeREST {
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(3, Long.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(4, Class.class,
+                .registerStoredProcedureParameter(4, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(5, Class.class,
                         ParameterMode.OUT)
                 .setParameter(1, id)
                 .setParameter(2, estado)
-                .setParameter(3, cliente);
+                .setParameter(3, cliente)
+                .setParameter(4, tipo);
 
         query.execute();
 
-        Object resp = query.getOutputParameterValue(4);
+        Object resp = query.getOutputParameterValue(5);
+        String su = "{"
+                + "\"resp\":" + resp
+                + "}";
+        return Response.ok()
+                .entity(su.toString()).build();
+
+    }
+    
+    @PUT
+    @Path("Estado/{id}/{estado}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response etado(@PathParam("id") Long id, @PathParam("estado") BigInteger estado) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_SOLICITUD.ESTADO")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, BigInteger.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(3, Class.class,
+                        ParameterMode.OUT)
+                .setParameter(1, id)
+                .setParameter(2, estado);
+        query.execute();
+
+        Object resp = query.getOutputParameterValue(3);
         String su = "{"
                 + "\"resp\":" + resp
                 + "}";
@@ -129,7 +160,8 @@ public class SolicitudFacadeREST {
         for (Object[] aux : SELECT_ALL) {
             su += "{\"id\":\"" + aux[0] + "\","
                     + "\"estado\":\"" + aux[1] + "\","
-                    + "\"cliente\":\"" + aux[2] + "\""
+                    + "\"cliente\":\"" + aux[2] + "\","
+                    + "\"rol\":\"" + aux[3] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -155,7 +187,8 @@ public class SolicitudFacadeREST {
         for (Object[] aux : SELECT_ALL) {
             su += "{\"id\":\"" + aux[0] + "\","
                     + "\"estado\":\"" + aux[1] + "\","
-                    + "\"cliente\":\"" + aux[2] + "\""
+                    + "\"cliente\":\"" + aux[2] + "\","
+                    + "\"rol\":\"" + aux[3] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
