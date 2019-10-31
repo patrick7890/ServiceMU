@@ -201,6 +201,65 @@ public class BoletaFacadeREST {
         return Response.ok().entity(su).build();
 
     }
+    @GET
+    @Path("Boleta/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response BoletaCliente(@PathParam("id") Long id) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_BOLETA.BOLETACLIENTE")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Class.class,
+                        ParameterMode.REF_CURSOR)
+                    .setParameter(1, id);
+
+        query.execute();
+
+        List<Object[]> SELECT_ALL = query.getResultList();
+        String su = " ";
+
+        for (Object[] aux : SELECT_ALL) {
+            su += "{\"id\":\"" + aux[0] + "\","
+                    + "\"fecha\":\"" + aux[1] + "\","
+                    + "\"total\":\"" + aux[2] + "\","
+                    + "\"estado\":\"" + aux[3] + "\","
+                    + "\"transporte\":\"" + aux[7] + "\""
+                    + "},";
+        }
+        su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
+        if (su.equals("{\"Array\":[]}")) {
+            return Response.ok().entity("null").build();
+        }
+        return Response.ok().entity(su).build();
+
+    }
+    @PUT
+    @Path("{id}/{estado}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response edit(@PathParam("id") Long id,@PathParam("estado") BigInteger estado) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_BOLETA.COMPLETARENTREGA")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, BigInteger.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(3, int.class,
+                        ParameterMode.OUT)
+                .setParameter(1, id)
+                .setParameter(2, estado);
+               
+                
+
+        query.execute();
+
+        Object resp = query.getOutputParameterValue(3);
+        String su = "{"
+                + "\"resp\": " + resp
+                + "}";
+        return Response.ok()
+                .entity(su.toString()).build();
+
+    }
 
     protected EntityManager getEntityManager() {
         return em;

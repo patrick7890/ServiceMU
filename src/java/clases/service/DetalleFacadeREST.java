@@ -173,6 +173,39 @@ public class DetalleFacadeREST {
         }
         return Response.ok().entity(su).build();
     }
+    @GET
+    @Path("Detalle/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response DetalleBoleta(@PathParam("id") Long id) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_DETALLE.TOTAL_BOLETA")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Class.class,
+                        ParameterMode.REF_CURSOR)
+                 .setParameter(1, id);
+
+        query.execute();
+        List<Object[]> SELECT_ALL = query.getResultList();
+
+        String su = " ";
+
+        for (Object[] aux : SELECT_ALL) {
+            su += "{\"nombre\":\"" + aux[0] + "\","
+                    + "\"valor\":\"" + aux[1] + "\","
+                    + "\"cantidad\":\"" + aux[2] + "\","
+                    + "\"total_prod\":\"" + aux[3] + "\","
+                    + "\"total_bol\":\"" + aux[4] + "\","
+                    + "\"total_trans\":\"" + aux[5] + "\","
+                    + "\"final\":\"" + aux[6] + "\""
+                    + "},";
+        }
+        su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
+        if (su.equals("{\"Array\":[]}")) {
+            return Response.ok().entity("null").build();
+        }
+        return Response.ok().entity(su).build();
+    }
 
     protected EntityManager getEntityManager() {
         return em;
