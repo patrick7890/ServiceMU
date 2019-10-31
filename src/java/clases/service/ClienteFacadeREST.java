@@ -248,7 +248,7 @@ public class ClienteFacadeREST {
             return Response.ok()
                     .entity("null").build();
         }
-        enviar.enviarCorreo("sulufalento@gmail.com", "estoy logueado", "c marmotas");
+//        enviar.enviarCorreo("sulufalento@gmail.com", "estoy logueado", "c marmotas");
         return Response.ok()
                 .entity(su.toString()).build();
     }
