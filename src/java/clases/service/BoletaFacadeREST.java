@@ -8,6 +8,7 @@ package clases.service;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
@@ -34,7 +35,8 @@ public class BoletaFacadeREST {
 
     @PersistenceContext(unitName = "ServiceMUPU")
     private EntityManager em;
-
+     @EJB
+    private CorreoBean enviar;
     @POST
     @Path("{total}/{estado}/{ruta}/{cliente}/{direccion}/{total_trans}")
     @Consumes({MediaType.APPLICATION_JSON})
@@ -69,9 +71,38 @@ public class BoletaFacadeREST {
         String su = "{"
                 + "\"resp\": " + resp
                 + "}";
+        String mensaje ="Se ha generado una compra con numero de boleta:"+resp.toString();
+        String asunto ="Boleta de Compra";
+       String destino = CorreoBoletaCliente(cliente,asunto,mensaje);
+        if (destino !="") {
+            enviar.enviarCorreo(destino, asunto, mensaje);
+        }
+        
         return Response.ok()
                 .entity(su.toString()).build();
 
+    }
+    public String CorreoBoletaCliente(Long id,String asunto,String mensaje){
+    StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE.FIND")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Class.class,
+                        ParameterMode.REF_CURSOR)
+                .setParameter(1, id);
+
+        query.execute();
+        List<Object[]> SELECT_ALL = query.getResultList();
+        String destino="";
+
+        for (Object[] aux : SELECT_ALL) {
+            destino = (aux[6]).toString();
+         
+        }
+        //System.out.println(destino);
+        //enviar.enviarCorreo(destino, asunto, mensaje);
+        //enviar.enviarCorreo("teamalexduoc@gmail.com",asunto,mensaje);
+        return destino;
     }
 
     @PUT

@@ -278,6 +278,11 @@ public class SubastaFacadeREST {
         String su = "{"
                 + "\"resp\": " + resp
                 + "}";
+        System.out.println(resp);
+        if (!resp.equals(null) && !resp.equals(0)) {
+            
+            
+        }
         return Response.ok()
                 .entity(su.toString()).build();
 
