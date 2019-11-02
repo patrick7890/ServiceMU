@@ -35,15 +35,15 @@ public class BoletaFacadeREST {
 
     @PersistenceContext(unitName = "ServiceMUPU")
     private EntityManager em;
-     @EJB
+    @EJB
     private CorreoBean enviar;
+
     @POST
     @Path("{total}/{estado}/{ruta}/{cliente}/{direccion}/{total_trans}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response create( @PathParam("total") Long total, @PathParam("estado") BigInteger estado, @PathParam("ruta") String ruta, @PathParam("cliente") Long cliente, @PathParam("direccion") Long direccion,@PathParam("total_trans") Long total_trans) {
+    public Response create(@PathParam("total") Long total, @PathParam("estado") BigInteger estado, @PathParam("ruta") String ruta, @PathParam("cliente") Long cliente, @PathParam("direccion") Long direccion, @PathParam("total_trans") Long total_trans) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_BOLETA.INSERTAR")
-                
                 .registerStoredProcedureParameter(1, Long.class,
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(2, BigInteger.class,
@@ -58,7 +58,6 @@ public class BoletaFacadeREST {
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(7, int.class,
                         ParameterMode.OUT)
-               
                 .setParameter(1, total)
                 .setParameter(2, estado)
                 .setParameter(3, ruta)
@@ -71,20 +70,21 @@ public class BoletaFacadeREST {
         String su = "{"
                 + "\"resp\": " + resp
                 + "}";
-        String mensaje ="Se ha generado una compra con numero de boleta:"+resp.toString();
-        String asunto ="Boleta de Compra";
-       String destino = CorreoBoletaCliente(cliente,asunto,mensaje);
-        if (destino !="") {
+        String mensaje = "Se ha generado una compra con numero de boleta:" + resp.toString();
+        String asunto = "Boleta de Compra";
+        String destino = CorreoBoletaCliente(cliente, asunto, mensaje);
+        if (destino != "") {
             enviar.enviarCorreo(destino, asunto, mensaje);
         }
-        
+
         return Response.ok()
                 .entity(su.toString()).build();
 
     }
-    public String CorreoBoletaCliente(Long id,String asunto,String mensaje){
-    StoredProcedureQuery query = em
-                .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE.FIND")
+
+    public String CorreoBoletaCliente(Long id, String asunto, String mensaje) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE.FINDID")
                 .registerStoredProcedureParameter(1, Long.class,
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(2, Class.class,
@@ -93,15 +93,15 @@ public class BoletaFacadeREST {
 
         query.execute();
         List<Object[]> SELECT_ALL = query.getResultList();
-        String destino="";
+        String destino = "";
 
         for (Object[] aux : SELECT_ALL) {
             destino = (aux[6]).toString();
-         
+
         }
         //System.out.println(destino);
-        //enviar.enviarCorreo(destino, asunto, mensaje);
-        //enviar.enviarCorreo("teamalexduoc@gmail.com",asunto,mensaje);
+        enviar.enviarCorreo(destino, asunto, mensaje);
+//        enviar.enviarCorreo("teamalexduoc@gmail.com",asunto,mensaje);
         return destino;
     }
 
@@ -232,6 +232,7 @@ public class BoletaFacadeREST {
         return Response.ok().entity(su).build();
 
     }
+
     @GET
     @Path("Boleta/{id}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -242,7 +243,7 @@ public class BoletaFacadeREST {
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(2, Class.class,
                         ParameterMode.REF_CURSOR)
-                    .setParameter(1, id);
+                .setParameter(1, id);
 
         query.execute();
 
@@ -264,10 +265,11 @@ public class BoletaFacadeREST {
         return Response.ok().entity(su).build();
 
     }
+
     @PUT
     @Path("{id}/{estado}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response edit(@PathParam("id") Long id,@PathParam("estado") BigInteger estado) {
+    public Response edit(@PathParam("id") Long id, @PathParam("estado") BigInteger estado) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_BOLETA.COMPLETARENTREGA")
                 .registerStoredProcedureParameter(1, Long.class,
@@ -278,8 +280,6 @@ public class BoletaFacadeREST {
                         ParameterMode.OUT)
                 .setParameter(1, id)
                 .setParameter(2, estado);
-               
-                
 
         query.execute();
 

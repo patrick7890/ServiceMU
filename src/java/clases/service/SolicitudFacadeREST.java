@@ -7,6 +7,7 @@ package clases.service;
 
 import java.math.BigInteger;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
@@ -33,6 +34,9 @@ public class SolicitudFacadeREST {
 
     @PersistenceContext(unitName = "ServiceMUPU")
     private EntityManager em;
+
+    @EJB
+    private CorreoBean enviar;
 
     @POST
     @Path("{estado}/{cliente}/{tipo}")
@@ -93,11 +97,11 @@ public class SolicitudFacadeREST {
                 .entity(su.toString()).build();
 
     }
-    
+
     @PUT
-    @Path("Estado/{id}/{estado}")
+    @Path("Estado/{id}/{estado}/{cli}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response etado(@PathParam("id") Long id, @PathParam("estado") BigInteger estado) {
+    public Response estado(@PathParam("id") Long id, @PathParam("estado") BigInteger estado, @PathParam("cli") Long cli) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_SOLICITUD.ESTADO")
                 .registerStoredProcedureParameter(1, Long.class,
@@ -114,9 +118,47 @@ public class SolicitudFacadeREST {
         String su = "{"
                 + "\"resp\":" + resp
                 + "}";
+        sendmail(id, estado, cli);
         return Response.ok()
                 .entity(su.toString()).build();
 
+    }
+
+    void sendmail(Long sol_id, BigInteger estado, Long cli) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE.FINDID")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Class.class,
+                        ParameterMode.REF_CURSOR)
+                .setParameter(1, cli);
+
+        query.execute();
+        List<Object[]> SELECT_ALL = query.getResultList();
+        String destino = "";
+
+        for (Object[] aux : SELECT_ALL) {
+            destino = (aux[6]).toString();
+
+        }
+        //System.out.println(destino);
+        String asunto = "Solicitud n°" + sol_id;
+        String mensaje = "I really just wanna die... TURUTURUTUTUTURUTURUTUTUTURUTURUTUTU";
+        switch (Integer.parseInt(estado.toString())) {
+            case 0:
+                mensaje = "Su solicitud se Encunetra pendiente";
+                break;
+            case 1:
+                mensaje = "Su solicitud Fue Aceptada";
+                break;
+            case 2:
+                mensaje = "Su solicitud Fue Rechazada";
+                break;
+            default:
+                mensaje = "I really just wanna die... TURUTURUTUTUTURUTURUTUTUTURUTURUTUTU";
+                break;
+        }
+        enviar.enviarCorreo(destino, asunto, mensaje);
     }
 
     @DELETE
