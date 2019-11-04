@@ -6,6 +6,7 @@
 package clases.service;
 
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.ParameterMode;
@@ -32,6 +33,8 @@ public class ClienteFacadeREST {
 
     @PersistenceContext(unitName = "ServiceMUPU")
     private EntityManager em;
+    @EJB
+    private CorreoBean enviar;
 
     @POST
     @Path("{rut}/{nombre}/{apellido}/{usuario}/{pass}/{correo}")
@@ -207,6 +210,8 @@ public class ClienteFacadeREST {
     protected EntityManager getEntityManager() {
         return em;
     }
+    
+    
 
     @GET
     @Path("Login/{usu}/{pass}")
@@ -245,6 +250,7 @@ public class ClienteFacadeREST {
             return Response.ok()
                     .entity("null").build();
         }
+        //enviar.enviarCorreo("sulufalento@gmail.com", "estoy logueado", "c marmotas");
         return Response.ok()
                 .entity(su.toString()).build();
     }

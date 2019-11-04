@@ -34,29 +34,23 @@ public class ContratoFacadeREST {
     private EntityManager em;
 
     @POST
-    @Path("{cliente}/{contrato}{fecha}/{ruta}")
+    @Path("{cliente}/{ruta}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response create(@PathParam("cliente") Long cliente, @PathParam("contrato") Long contrato, @PathParam("fecha") String fecha, @PathParam("ruta") String ruta) {
+    public Response create(@PathParam("cliente") Long cliente,@PathParam("ruta") String ruta) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_CONTRATO.INSERTAR")
                 .registerStoredProcedureParameter(1, Long.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(2, Long.class,
+                .registerStoredProcedureParameter(2, String.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(3, String.class,
-                        ParameterMode.IN)
-                .registerStoredProcedureParameter(4, String.class,
-                        ParameterMode.IN)
-                .registerStoredProcedureParameter(5, Class.class,
+                .registerStoredProcedureParameter(3, Class.class,
                         ParameterMode.OUT)
                 .setParameter(1, cliente)
-                .setParameter(2, contrato)
-                .setParameter(3, fecha)
-                .setParameter(4, ruta);
+                .setParameter(2, ruta);
 
         query.execute();
 
-        Object resp = query.getOutputParameterValue(5);
+        Object resp = query.getOutputParameterValue(3);
         String su = "{"
                 + "\"resp\": " + resp
                 + "}";
@@ -134,10 +128,10 @@ public class ContratoFacadeREST {
         String su = " ";
 
         for (Object[] aux : SELECT_ALL) {
-            su += "{\"Usuario\":\"" + aux[0] + "\","
-                    + "\"Contrato\":\"" + aux[1] + "\","
-                    + "\"Fecha\":\"" + aux[2] + "\","
-                    + "\"Ruta\":\"" + aux[3] + "\""
+            su += "{\"Usuario\":\"" + aux[3] + "\","
+                    + "\"Contrato\":\"" + aux[0] + "\","
+                    + "\"Fecha\":\"" + aux[1] + "\","
+                    + "\"Ruta\":\"" + aux[2] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -146,7 +140,7 @@ public class ContratoFacadeREST {
         }
         return Response.ok().entity(su).build();
     }
-
+    
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response findAll() {
@@ -161,10 +155,10 @@ public class ContratoFacadeREST {
         String su = " ";
 
         for (Object[] aux : SELECT_ALL) {
-            su += "{\"usuario\":\"" + aux[0] + "\","
-                    + "\"contrato\":\"" + aux[1] + "\","
-                    + "\"fecha\":\"" + aux[2] + "\","
-                    + "\"ruta\":\"" + aux[3] + "\""
+            su += "{\"Usuario\":\"" + aux[3] + "\","
+                    + "\"Contrato\":\"" + aux[0] + "\","
+                    + "\"Fecha\":\"" + aux[1] + "\","
+                    + "\"Ruta\":\"" + aux[2] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -176,5 +170,35 @@ public class ContratoFacadeREST {
 
     protected EntityManager getEntityManager() {
         return em;
+    }
+    
+    @GET
+    @Path("cli/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findCli(@PathParam("id") Long id) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_CONTRATO.FINDCLI")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Class.class,
+                        ParameterMode.REF_CURSOR)
+                .setParameter(1, id);
+
+        query.execute();
+        List<Object[]> SELECT_ALL = query.getResultList();
+        String su = " ";
+
+        for (Object[] aux : SELECT_ALL) {
+            su += "{\"Usuario\":\"" + aux[3] + "\","
+                    + "\"Contrato\":\"" + aux[0] + "\","
+                    + "\"Fecha\":\"" + aux[1] + "\","
+                    + "\"Ruta\":\"" + aux[2] + "\""
+                    + "},";
+        }
+        su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
+        if (su.equals("{\"Array\":[]}")) {
+            return Response.ok().entity("null").build();
+        }
+        return Response.ok().entity(su).build();
     }
 }
