@@ -265,19 +265,22 @@ public class BoletaFacadeREST {
 
     }
     @PUT
-    @Path("{id}/{estado}")
+    @Path("{id}/{estado}/{ruta}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response edit(@PathParam("id") Long id,@PathParam("estado") BigInteger estado) {
+    public Response edit(@PathParam("id") Long id,@PathParam("estado") BigInteger estado,@PathParam("ruta") BigInteger ruta) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_BOLETA.COMPLETARENTREGA")
                 .registerStoredProcedureParameter(1, Long.class,
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(2, BigInteger.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(3, int.class,
+                  .registerStoredProcedureParameter(3, String.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(4, int.class,
                         ParameterMode.OUT)
                 .setParameter(1, id)
-                .setParameter(2, estado);
+                .setParameter(2, estado)
+                .setParameter(3, ruta);
                
                 
 

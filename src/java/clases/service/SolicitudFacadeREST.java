@@ -39,8 +39,8 @@ public class SolicitudFacadeREST {
     @Consumes({MediaType.APPLICATION_JSON})
     public Response create(@PathParam("estado") BigInteger estado, @PathParam("cliente") Long cliente, @PathParam("tipo") Long tipo) {
         StoredProcedureQuery query = em
-                .createStoredProcedureQuery("PKG_MAIPOU_SOLICITUD.MODIFICAR")
-                .registerStoredProcedureParameter(1, String.class,
+                .createStoredProcedureQuery("PKG_MAIPOU_SOLICITUD.INSERTAR")
+                .registerStoredProcedureParameter(1, BigInteger.class,
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(2, Long.class,
                         ParameterMode.IN)
