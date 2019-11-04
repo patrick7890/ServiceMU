@@ -43,14 +43,17 @@ public class ClienteTipoFacadeREST {
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(2, Long.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(3, Class.class,
+                .registerStoredProcedureParameter(3, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(4, Class.class,
                         ParameterMode.OUT)
                 .setParameter(1, cliente)
-                .setParameter(2, tipo);
+                .setParameter(2, tipo)
+                .setParameter(3, 1);
 
         query.execute();
 
-        Object resp = query.getOutputParameterValue(3);
+        Object resp = query.getOutputParameterValue(4);
         String su = "{"
                 + "\"resp\": "+resp
                 
@@ -61,23 +64,26 @@ public class ClienteTipoFacadeREST {
     }
 
     @PUT
-    @Path("{cliente}/{tipo}")
+    @Path("{cliente}/{tipo}/{estado}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response edit(@PathParam("cliente") Long cliente, @PathParam("tipo") Long tipo) {
+    public Response edit(@PathParam("cliente") Long cliente, @PathParam("tipo") Long tipo,@PathParam("estado")Long estado) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE_TIPO.MODIFICAR")
                 .registerStoredProcedureParameter(1, Long.class,
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(2, Long.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(3, Class.class,
+                .registerStoredProcedureParameter(3, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(4, Class.class,
                         ParameterMode.OUT)
                 .setParameter(1, cliente)
-                .setParameter(2, tipo);
+                .setParameter(2, tipo)
+                .setParameter(3, estado);
 
         query.execute();
 
-        Object resp = query.getOutputParameterValue(3);
+        Object resp = query.getOutputParameterValue(4);
         String su = "{"
                 + "\"resp\":" + resp
                 + "}";
@@ -101,7 +107,7 @@ public class ClienteTipoFacadeREST {
 
         query.execute();
 
-        Object resp = query.getOutputParameterValue(2);
+        Object resp = query.getOutputParameterValue(3);
         String su = "{"
                 + "\"resp\":" + resp
                 + "}";
@@ -127,7 +133,8 @@ public class ClienteTipoFacadeREST {
 
         for (Object[] aux : SELECT_ALL) {
             su += "{\"cliente\":\"" + aux[0] + "\","
-                    + "\"tipo\":\"" + aux[1] + "\""
+                    + "\"tipo\":\"" + aux[1] + "\","
+                    + "\"estado\":\"" + aux[2] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -152,7 +159,8 @@ public class ClienteTipoFacadeREST {
 
         for (Object[] aux : SELECT_ALL) {
             su += "{\"cliente\":\"" + aux[0] + "\","
-                    + "\"tipo\":\"" + aux[1] + "\""
+                    + "\"tipo\":\"" + aux[1] + "\","
+                    + "\"estado\":\"" + aux[2] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
