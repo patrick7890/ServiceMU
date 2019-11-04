@@ -34,29 +34,23 @@ public class ContratoFacadeREST {
     private EntityManager em;
 
     @POST
-    @Path("{cliente}/{contrato}{fecha}/{ruta}")
+    @Path("{cliente}/{ruta}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response create(@PathParam("cliente") Long cliente, @PathParam("contrato") Long contrato, @PathParam("fecha") String fecha, @PathParam("ruta") String ruta) {
+    public Response create(@PathParam("cliente") Long cliente,@PathParam("ruta") String ruta) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_CONTRATO.INSERTAR")
                 .registerStoredProcedureParameter(1, Long.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(2, Long.class,
+                .registerStoredProcedureParameter(2, String.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(3, String.class,
-                        ParameterMode.IN)
-                .registerStoredProcedureParameter(4, String.class,
-                        ParameterMode.IN)
-                .registerStoredProcedureParameter(5, Class.class,
+                .registerStoredProcedureParameter(3, Class.class,
                         ParameterMode.OUT)
                 .setParameter(1, cliente)
-                .setParameter(2, contrato)
-                .setParameter(3, fecha)
-                .setParameter(4, ruta);
+                .setParameter(2, ruta);
 
         query.execute();
 
-        Object resp = query.getOutputParameterValue(5);
+        Object resp = query.getOutputParameterValue(3);
         String su = "{"
                 + "\"resp\": " + resp
                 + "}";
