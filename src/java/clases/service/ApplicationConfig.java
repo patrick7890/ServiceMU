@@ -31,7 +31,6 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(clases.service.BoletaFacadeREST.class);
         resources.add(clases.service.ClienteFacadeREST.class);
-        resources.add(clases.service.ClienteTipoFacadeREST.class);
         resources.add(clases.service.ComunaFacadeREST.class);
         resources.add(clases.service.ContratoFacadeREST.class);
         resources.add(clases.service.DetalleFacadeREST.class);

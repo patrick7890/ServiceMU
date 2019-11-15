@@ -40,6 +40,7 @@ public class ClienteFacadeREST {
     @Path("{rut}/{nombre}/{apellido}/{usuario}/{pass}/{correo}")
     @Consumes({MediaType.APPLICATION_JSON})
     public Response create(@PathParam("rut") String rut, @PathParam("nombre") String nombre, @PathParam("apellido") String apellido, @PathParam("usuario") String usuario, @PathParam("pass") String pass, @PathParam("correo") String correo) {
+        pass = encryp(pass);
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE.INSERTAR")
                 .registerStoredProcedureParameter(1, String.class,
@@ -76,10 +77,55 @@ public class ClienteFacadeREST {
                 .entity(su.toString()).build();
     }
 
-    @PUT
-    @Path("{id}/{rut}/{nombre}/{apellido}/{usuario}/{pass}/{correo}/{estado}")
+    @POST
+    @Path("{rut}/{nombre}/{apellido}/{usuario}/{pass}/{correo}/{tipo}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response edit(@PathParam("id") Long id, @PathParam("rut") String rut, @PathParam("nombre") String nombre, @PathParam("apellido") String apellido, @PathParam("usuario") String usuario, @PathParam("pass") String pass, @PathParam("correo") String correo, @PathParam("correo") Long estado) {
+    public Response createDesk(@PathParam("rut") String rut, @PathParam("nombre") String nombre, @PathParam("apellido") String apellido, @PathParam("usuario") String usuario, @PathParam("pass") String pass, @PathParam("correo") String correo, @PathParam("correo") Long tipo) {
+        pass = encryp(pass);
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE.INSERTARDESK")
+                .registerStoredProcedureParameter(1, String.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, String.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(3, String.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(4, String.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(5, String.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(6, String.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(7, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(8, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(9, Class.class,
+                        ParameterMode.OUT)
+                .setParameter(1, rut)
+                .setParameter(2, nombre)
+                .setParameter(3, apellido)
+                .setParameter(4, usuario)
+                .setParameter(5, pass)
+                .setParameter(6, correo)
+                .setParameter(7, Long.parseLong("1"))
+                .setParameter(8, tipo);
+
+        query.execute();
+
+        Object resp = query.getOutputParameterValue(9);
+        String su = "{"
+                + "\"resp\": " + resp
+                + "}";
+        return Response.ok()
+                .entity(su.toString()).build();
+    }
+
+    @PUT
+    @Path("{id}/{rut}/{nombre}/{apellido}/{usuario}/{pass}/{correo}/{estado}/{tipo}")
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response edit(@PathParam("id") Long id, @PathParam("rut") String rut, @PathParam("nombre") String nombre, @PathParam("apellido") String apellido, @PathParam("usuario") String usuario, @PathParam("pass") String pass, @PathParam("correo") String correo, @PathParam("estado") Long estado, @PathParam("tipo") Long tipo) {
+        pass = checkPass(rut, pass) ? pass : encryp(pass);
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE.MODIFICAR")
                 .registerStoredProcedureParameter(1, Long.class,
@@ -96,9 +142,11 @@ public class ClienteFacadeREST {
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(7, String.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(8, String.class,
+                .registerStoredProcedureParameter(8, Long.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(9, Class.class,
+                .registerStoredProcedureParameter(9, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(10, Class.class,
                         ParameterMode.OUT)
                 .setParameter(1, id)
                 .setParameter(2, rut)
@@ -107,11 +155,12 @@ public class ClienteFacadeREST {
                 .setParameter(5, usuario)
                 .setParameter(6, pass)
                 .setParameter(7, correo)
-                .setParameter(8, estado);
+                .setParameter(8, estado)
+                .setParameter(9, tipo);
 
         query.execute();
 
-        Object resp = query.getOutputParameterValue(9);
+        Object resp = query.getOutputParameterValue(10);
         String su = "{"
                 + "\"resp\":" + resp
                 + "}";
@@ -158,6 +207,10 @@ public class ClienteFacadeREST {
         String su = " ";
 
         for (Object[] aux : SELECT_ALL) {
+            String tipo = "";
+            if (aux[8] != null) {
+                tipo = aux[8].toString();
+            }
             su += "{\"id\":\"" + aux[0] + "\","
                     + "\"rut\":\"" + aux[1] + "\","
                     + "\"nombre\":\"" + aux[2] + "\","
@@ -165,7 +218,8 @@ public class ClienteFacadeREST {
                     + "\"usuario\":\"" + aux[4] + "\","
                     + "\"pass\":\"" + aux[5] + "\","
                     + "\"correo\":\"" + aux[6] + "\","
-                    + "\"estado\":\"" + aux[7] + "\""
+                    + "\"estado\":\"" + aux[7] + "\","
+                    + "\"tipo\":\"" + tipo + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -189,6 +243,10 @@ public class ClienteFacadeREST {
         String su = " ";
 
         for (Object[] aux : SELECT_ALL) {
+            String tipo = "";
+            if (aux[8] != null) {
+                tipo = aux[8].toString();
+            }
             su += "{\"id\":\"" + aux[0] + "\","
                     + "\"rut\":\"" + aux[1] + "\","
                     + "\"nombre\":\"" + aux[2] + "\","
@@ -196,7 +254,8 @@ public class ClienteFacadeREST {
                     + "\"usuario\":\"" + aux[4] + "\","
                     + "\"pass\":\"" + aux[5] + "\","
                     + "\"correo\":\"" + aux[6] + "\","
-                    + "\"estado\":\"" + aux[7] + "\""
+                    + "\"estado\":\"" + aux[7] + "\","
+                    + "\"tipo\":\"" + tipo + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -210,13 +269,12 @@ public class ClienteFacadeREST {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-    
 
     @GET
     @Path("Login/{usu}/{pass}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response Login(@PathParam("usu") String usu, @PathParam("pass") String pass) {
+        pass = encryp(pass);
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE.LOGIN")
                 .registerStoredProcedureParameter(1, String.class,
@@ -233,6 +291,10 @@ public class ClienteFacadeREST {
         List<Object[]> usuario = query.getResultList();
         String su = " ";
         for (Object[] aux : usuario) {
+            String tipo = "";
+            if (aux[7] != null) {
+                tipo = aux[7].toString();
+            }
             su = "{"
                     + "\"id\": " + aux[0].toString() + ","
                     + "\"rut\": \"" + aux[1].toString() + "\","
@@ -241,7 +303,7 @@ public class ClienteFacadeREST {
                     + "\"usu\": \"" + aux[4].toString() + "\","
                     + "\"pass\": \"" + aux[5].toString() + "\","
                     + "\"correo\": \"" + aux[6].toString() + "\","
-                    + "\"tipo\": \"" + aux[7].toString() + "\""
+                    + "\"tipo\": \"" + tipo + "\""
                     + "},";
 
         }
@@ -254,4 +316,42 @@ public class ClienteFacadeREST {
         return Response.ok()
                 .entity(su.toString()).build();
     }
+
+    public String encryp(String pass) {
+        try {
+            java.security.MessageDigest md = java.security.MessageDigest.getInstance("MD5");
+
+            byte[] array = md.digest(pass.getBytes());
+
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < array.length; i++) {
+                sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1, 3));
+            }
+            return sb.toString();
+        } catch (java.security.NoSuchAlgorithmException e) {
+
+        }
+        return null;
+    }
+
+    boolean checkPass(String rut, String pass) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE.FIND")
+                .registerStoredProcedureParameter(1, String.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Class.class,
+                        ParameterMode.REF_CURSOR)
+                .setParameter(1, rut);
+
+        query.execute();
+        List<Object[]> SELECT_ALL = query.getResultList();
+
+        String su = " ";
+
+        for (Object[] aux : SELECT_ALL) {
+            su += aux[5];
+        }
+        return su == pass ? true : false;
+    }
+
 }
