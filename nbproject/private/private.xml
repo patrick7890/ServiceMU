@@ -3,8 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Patricio/Documents/NetBeansProjects/ServiceMU/src/java/clases/service/TipoClienteFacadeREST.java</file>
-            <file>file:/C:/Users/Patricio/Documents/NetBeansProjects/ServiceMU/src/java/clases/service/ContratoFacadeREST.java</file>
+            <file>file:/C:/Users/Patricio/Desktop/Portafolio/ServiceMU/src/java/clases/service/ContratoFacadeREST.java</file>
+            <file>file:/C:/Users/Patricio/Desktop/Portafolio/ServiceMU/src/java/clases/service/BoletaFacadeREST.java</file>
+            <file>file:/C:/Users/Patricio/Desktop/Portafolio/ServiceMU/src/java/clases/service/ClienteFacadeREST.java</file>
         </group>
     </open-files>
 </project-private>

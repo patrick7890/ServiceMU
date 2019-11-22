@@ -171,7 +171,8 @@ public class ProductoFacadeREST {
                     + "\"nombre\":\"" + aux[1] + "\","
                     + "\"desc\":\"" + aux[2] + "\","
                     + "\"estado\":\"" + aux[3] + "\","
-                    + "\"tipo\":\"" + aux[4] + "\""
+                    + "\"tipo\":\"" + aux[4] + "\","
+                    + "\"tipo_desc\":\"" + aux[5] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";

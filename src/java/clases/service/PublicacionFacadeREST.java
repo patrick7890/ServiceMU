@@ -93,7 +93,6 @@ public class PublicacionFacadeREST {
         return Response.ok()
                 .entity(su.toString()).build();
     }
-    
 
     @PUT
     @Path("{id}/{valor}/{stock}/{estado}/{producto}/{proveedor}")
@@ -175,7 +174,8 @@ public class PublicacionFacadeREST {
                     + "\"stock\":\"" + aux[2] + "\","
                     + "\"estado\":\"" + aux[3] + "\","
                     + "\"producto\":\"" + aux[4] + "\","
-                    + "\"proveedor\":\"" + aux[5] + "\""
+                    + "\"proveedor\":\"" + aux[5] + "\","
+                    + "\"ruta\":\"" + aux[6] + "\""
                     + "},";
         }
         su = "{\"Resp\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -218,14 +218,13 @@ public class PublicacionFacadeREST {
     }
 
     @GET
-    
+
     @Produces({MediaType.APPLICATION_JSON})
     public Response findAll() {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_PUBLICACION.SELECT_ALL")
                 .registerStoredProcedureParameter(1, Class.class,
                         ParameterMode.REF_CURSOR);
-                        
 
         query.execute();
         List<Object[]> SELECT_ALL = query.getResultList();
@@ -238,7 +237,8 @@ public class PublicacionFacadeREST {
                     + "\"stock\":\"" + aux[2] + "\","
                     + "\"estado\":\"" + aux[3] + "\","
                     + "\"producto\":\"" + aux[4] + "\","
-                    + "\"proveedor\":\"" + aux[5] + "\""
+                    + "\"proveedor\":\"" + aux[5] + "\","
+                    + "\"ruta\":\"" + aux[6] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -247,6 +247,7 @@ public class PublicacionFacadeREST {
         }
         return Response.ok().entity(su).build();
     }
+
     @GET
     @Path("Activo/{estado}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -270,7 +271,8 @@ public class PublicacionFacadeREST {
                     + "\"stock\":\"" + aux[2] + "\","
                     + "\"estado\":\"" + aux[3] + "\","
                     + "\"producto\":\"" + aux[4] + "\","
-                    + "\"proveedor\":\"" + aux[5] + "\""
+                    + "\"proveedor\":\"" + aux[5] + "\","
+                    + "\"ruta\":\"" + aux[6] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -279,9 +281,6 @@ public class PublicacionFacadeREST {
         }
         return Response.ok().entity(su).build();
     }
-    
-    
-    
 
     protected EntityManager getEntityManager() {
         return em;

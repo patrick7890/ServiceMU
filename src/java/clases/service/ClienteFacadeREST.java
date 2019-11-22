@@ -285,7 +285,7 @@ public class ClienteFacadeREST {
                         ParameterMode.REF_CURSOR)
                 .setParameter(1, usu)
                 .setParameter(2, pass);
-
+        System.out.println(pass);
         query.execute();
 
         List<Object[]> usuario = query.getResultList();
