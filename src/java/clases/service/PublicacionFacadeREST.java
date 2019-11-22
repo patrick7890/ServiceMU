@@ -96,9 +96,9 @@ public class PublicacionFacadeREST {
     
 
     @PUT
-    @Path("{id}/{valor}/{stock}/{estado}/{producto}/{proveedor}")
+    @Path("{id}/{valor}/{stock}/{estado}/{producto}/{proveedor}/{ruta}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response edit(@PathParam("id") Long id, @PathParam("valor") Long valor, @PathParam("stock") Long stock, @PathParam("estado") Long estado, @PathParam("producto") Long producto, @PathParam("proveedor") Long proveedor) {
+    public Response edit(@PathParam("id") Long id, @PathParam("valor") Long valor, @PathParam("stock") Long stock, @PathParam("estado") Long estado, @PathParam("producto") Long producto, @PathParam("proveedor") Long proveedor,@PathParam("ruta") String ruta) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_PUBLICACION.MODIFICAR")
                 .registerStoredProcedureParameter(1, Long.class,
@@ -113,18 +113,21 @@ public class PublicacionFacadeREST {
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(6, Long.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(7, Class.class,
+                .registerStoredProcedureParameter(7, String.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(8, Class.class,
                         ParameterMode.OUT)
                 .setParameter(1, id)
                 .setParameter(2, valor)
                 .setParameter(3, stock)
                 .setParameter(4, estado)
                 .setParameter(5, producto)
-                .setParameter(6, proveedor);
+                .setParameter(6, proveedor)
+                .setParameter(7, ruta);
 
         query.execute();
 
-        Object resp = query.getOutputParameterValue(7);
+        Object resp = query.getOutputParameterValue(8);
         String su = "{"
                 + "\"resp\":" + resp
                 + "}";
