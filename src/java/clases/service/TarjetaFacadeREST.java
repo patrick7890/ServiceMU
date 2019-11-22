@@ -36,10 +36,10 @@ public class TarjetaFacadeREST {
     @POST
     @Path("{num}/{cvv}/{exp}/{cliente}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response create(@PathParam("num") Long num, @PathParam("cvv") Long cvv, @PathParam("exp") String exp, @PathParam("cliente") Long cliente) {
+    public Response create(@PathParam("num") String num, @PathParam("cvv") Long cvv, @PathParam("exp") String exp, @PathParam("cliente") Long cliente) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_TARJETA.INSERTAR")
-                .registerStoredProcedureParameter(1, Long.class,
+                .registerStoredProcedureParameter(1, String.class,
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(2, Long.class,
                         ParameterMode.IN)
@@ -68,12 +68,12 @@ public class TarjetaFacadeREST {
     @PUT
     @Path("{id}/{num}/{cvv}/{exp}/{cliente}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response edit(@PathParam("id") Long id,@PathParam("num") Long num, @PathParam("cvv") Long cvv, @PathParam("exp") String exp, @PathParam("cliente") Long cliente) {
+    public Response edit(@PathParam("id") Long id,@PathParam("num") String num, @PathParam("cvv") Long cvv, @PathParam("exp") String exp, @PathParam("cliente") Long cliente) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_TARJETA.MODIFICAR")
                 .registerStoredProcedureParameter(1, Long.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(2, Long.class,
+                .registerStoredProcedureParameter(2, String.class,
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(3, Long.class,
                         ParameterMode.IN)
