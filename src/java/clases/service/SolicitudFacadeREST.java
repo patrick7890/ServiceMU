@@ -229,8 +229,10 @@ public class SolicitudFacadeREST {
         for (Object[] aux : SELECT_ALL) {
             su += "{\"id\":\"" + aux[0] + "\","
                     + "\"estado\":\"" + aux[1] + "\","
-                    + "\"cliente\":\"" + aux[2] + "\","
-                    + "\"rol\":\"" + aux[3] + "\""
+                    + "\"rol\":\"" + aux[2] + "\","
+                    + "\"id_cli\":\"" + aux[3] + "\","
+                    + "\"rut\":\"" + aux[4] + "\","
+                    + "\"nombre\":\"" + aux[5] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";

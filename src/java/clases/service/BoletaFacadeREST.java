@@ -269,26 +269,24 @@ public class BoletaFacadeREST {
     @PUT
     @Path("{id}/{estado}/{ruta}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response edit(@PathParam("id") Long id,@PathParam("estado") BigInteger estado,@PathParam("ruta") BigInteger ruta) {
+    public Response modificar(@PathParam("id") Long id, @PathParam("estado") BigInteger estado, @PathParam("ruta") String ruta) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_BOLETA.COMPLETARENTREGA")
                 .registerStoredProcedureParameter(1, Long.class,
                         ParameterMode.IN)
                 .registerStoredProcedureParameter(2, BigInteger.class,
                         ParameterMode.IN)
-                  .registerStoredProcedureParameter(3, String.class,
+                .registerStoredProcedureParameter(3, String.class,
                         ParameterMode.IN)
-                .registerStoredProcedureParameter(4, int.class,
+                .registerStoredProcedureParameter(4, Class.class,
                         ParameterMode.OUT)
                 .setParameter(1, id)
                 .setParameter(2, estado)
                 .setParameter(3, ruta);
-               
-                
 
         query.execute();
 
-        Object resp = query.getOutputParameterValue(3);
+        Object resp = query.getOutputParameterValue(4);
         String su = "{"
                 + "\"resp\": " + resp
                 + "}";

@@ -36,7 +36,7 @@ public class ContratoFacadeREST {
     @POST
     @Path("{cliente}/{ruta}")
     @Consumes({MediaType.APPLICATION_JSON})
-    public Response create(@PathParam("cliente") Long cliente,@PathParam("ruta") String ruta) {
+    public Response create(@PathParam("cliente") Long cliente, @PathParam("ruta") String ruta) {
         StoredProcedureQuery query = em
                 .createStoredProcedureQuery("PKG_MAIPOU_CONTRATO.INSERTAR")
                 .registerStoredProcedureParameter(1, Long.class,
@@ -128,10 +128,11 @@ public class ContratoFacadeREST {
         String su = " ";
 
         for (Object[] aux : SELECT_ALL) {
-            su += "{\"Usuario\":\"" + aux[3] + "\","
-                    + "\"Contrato\":\"" + aux[0] + "\","
+            su += "{\"Contrato\":\"" + aux[0] + "\","
                     + "\"Fecha\":\"" + aux[1] + "\","
-                    + "\"Ruta\":\"" + aux[2] + "\""
+                    + "\"Ruta\":\"" + aux[2] + "\","
+                    + "\"nombre\":\"" + aux[3] + "\","
+                    + "\"rut\":\"" + aux[4] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -140,7 +141,7 @@ public class ContratoFacadeREST {
         }
         return Response.ok().entity(su).build();
     }
-    
+
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response findAll() {
@@ -155,10 +156,11 @@ public class ContratoFacadeREST {
         String su = " ";
 
         for (Object[] aux : SELECT_ALL) {
-            su += "{\"Usuario\":\"" + aux[3] + "\","
-                    + "\"Contrato\":\"" + aux[0] + "\","
+            su += "{\"Contrato\":\"" + aux[0] + "\","
                     + "\"Fecha\":\"" + aux[1] + "\","
-                    + "\"Ruta\":\"" + aux[2] + "\""
+                    + "\"Ruta\":\"" + aux[2] + "\","
+                    + "\"nombre\":\"" + aux[3] + "\","
+                    + "\"rut\":\"" + aux[4] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
@@ -171,7 +173,7 @@ public class ContratoFacadeREST {
     protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     @GET
     @Path("cli/{id}")
     @Produces({MediaType.APPLICATION_JSON})
@@ -189,10 +191,11 @@ public class ContratoFacadeREST {
         String su = " ";
 
         for (Object[] aux : SELECT_ALL) {
-            su += "{\"Usuario\":\"" + aux[3] + "\","
-                    + "\"Contrato\":\"" + aux[0] + "\","
+            su += "{\"Contrato\":\"" + aux[0] + "\","
                     + "\"Fecha\":\"" + aux[1] + "\","
-                    + "\"Ruta\":\"" + aux[2] + "\""
+                    + "\"Ruta\":\"" + aux[2] + "\","
+                    + "\"nombre\":\"" + aux[3] + "\","
+                    + "\"rut\":\"" + aux[4] + "\""
                     + "},";
         }
         su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";

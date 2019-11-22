@@ -211,7 +211,7 @@ public class PublicacionFacadeREST {
                     + "\"estado\":\"" + aux[3] + "\","
                     + "\"producto\":\"" + aux[4] + "\","
                     + "\"proveedor\":\"" + aux[5] + "\","
-                    + "\"ruta\":\"" + aux[6] + "\","
+                    + "\"ruta\":\"" + aux[6] + "\""
                     + "},";
         }
         su = "{\"Resp\":[" + su.substring(0, su.length() - 1) + "]}";
