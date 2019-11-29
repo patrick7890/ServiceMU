@@ -44,8 +44,6 @@ public class ApplicationConfig extends Application {
         resources.add(clases.service.TarjetaFacadeREST.class);
         resources.add(clases.service.TipoClienteFacadeREST.class);
         resources.add(clases.service.TipoProdFacadeREST.class);
-        resources.add(clases.service.TipoTransporteFacadeREST.class);
-        resources.add(clases.service.TransporteFacadeREST.class);
     }
     
 }
