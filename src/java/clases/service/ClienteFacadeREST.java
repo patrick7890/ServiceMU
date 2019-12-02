@@ -349,9 +349,9 @@ public class ClienteFacadeREST {
         String su = " ";
 
         for (Object[] aux : SELECT_ALL) {
-            su += aux[5];
+            su = aux[5].toString();
         }
-        return su == pass ? true : false;
+        return su.equals(pass) ? true : false;
     }
 
 }
