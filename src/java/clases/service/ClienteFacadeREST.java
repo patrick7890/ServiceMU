@@ -228,7 +228,45 @@ public class ClienteFacadeREST {
         }
         return Response.ok().entity(su).build();
     }
+    @GET
+    @Path("findid/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findID(@PathParam("id") Long id) {
+        StoredProcedureQuery query = em
+                .createStoredProcedureQuery("PKG_MAIPOU_CLIENTE.FINDID")
+                .registerStoredProcedureParameter(1, Long.class,
+                        ParameterMode.IN)
+                .registerStoredProcedureParameter(2, Class.class,
+                        ParameterMode.REF_CURSOR)
+                .setParameter(1, id);
 
+        query.execute();
+        List<Object[]> SELECT_ALL = query.getResultList();
+
+        String su = " ";
+
+        for (Object[] aux : SELECT_ALL) {
+            String tipo = "";
+            if (aux[8] != null) {
+                tipo = aux[8].toString();
+            }
+            su += "{\"id\":\"" + aux[0] + "\","
+                    + "\"rut\":\"" + aux[1] + "\","
+                    + "\"nombre\":\"" + aux[2] + "\","
+                    + "\"apellido\":\"" + aux[3] + "\","
+                    + "\"usuario\":\"" + aux[4] + "\","
+                    + "\"pass\":\"" + aux[5] + "\","
+                    + "\"correo\":\"" + aux[6] + "\","
+                    + "\"estado\":\"" + aux[7] + "\","
+                    + "\"tipo\":\"" + tipo + "\""
+                    + "},";
+        }
+        su = "{\"Array\":[" + su.substring(0, su.length() - 1) + "]}";
+        if (su.equals("{\"Array\":[]}")) {
+            return Response.ok().entity("null").build();
+        }
+        return Response.ok().entity(su).build();
+    }
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public Response findAll() {
